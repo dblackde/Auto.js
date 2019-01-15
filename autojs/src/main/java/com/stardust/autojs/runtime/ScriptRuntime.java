@@ -32,6 +32,7 @@ import com.stardust.autojs.core.accessibility.UiSelector;
 import com.stardust.autojs.runtime.api.Images;
 import com.stardust.autojs.core.image.capture.ScreenCaptureRequester;
 import com.stardust.autojs.runtime.api.Dialogs;
+import com.stardust.autojs.runtime.api.WebSocket;
 import com.stardust.autojs.runtime.exception.ScriptEnvironmentException;
 import com.stardust.autojs.runtime.exception.ScriptException;
 import com.stardust.autojs.runtime.exception.ScriptInterruptedException;
@@ -184,6 +185,9 @@ public class ScriptRuntime {
     public Sensors sensors;
 
     @ScriptVariable
+    public WebSocket webSocket;
+
+    @ScriptVariable
     public final Media media;
 
     private Images images;
@@ -227,6 +231,7 @@ public class ScriptRuntime {
         events = new Events(uiHandler.getContext(), accessibilityBridge, this);
         mThread = Thread.currentThread();
         sensors = new Sensors(uiHandler.getContext(), this);
+        webSocket = new WebSocket(this);
     }
 
     public static void setApplicationContext(Context context) {
@@ -387,6 +392,7 @@ public class ScriptRuntime {
             ignoresException(images::releaseScreenCapturer);
         }
         ignoresException(sensors::unregisterAll);
+        ignoresException(webSocket::stop);
         ignoresException(timers::recycle);
     }
 
